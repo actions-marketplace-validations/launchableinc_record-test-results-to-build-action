@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_GO_EXAMPLE_TOKEN }}
+  LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN }}
 
 jobs:
   tests:
