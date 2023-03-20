@@ -39,9 +39,9 @@ jobs:
           source_path: ./examples/go/
       - name: test
         run: cd examples/go && go test -v ./... 2>&1 | go-junit-report -set-exit-code > report.xml
-      - name: Record test results to build
+      - name: Record test results to build action
         uses: ./
-        # uses: launchableinc/record-build-and-test-results-action@v1.0.0
+        # uses: launchableinc/record-test-results-to-build@v1.0.0
         with:
           build_name: $GITHUB_RUN_ID
           report_path: ./examples/go/
