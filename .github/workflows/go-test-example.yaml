@@ -19,8 +19,6 @@ permissions:
 
 jobs:
   tests:
-    env:
-      LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_GO_EXAMPLE_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -41,7 +39,7 @@ jobs:
         run: cd examples/go && go test -v ./... 2>&1 | go-junit-report -set-exit-code > report.xml
       - name: Record test results to build action
         uses: ./
-        # uses: launchableinc/record-test-results-to-build@v1.0.0
+        # uses: launchableinc/record-test-results-to-build-action@v0.1.1
         with:
           build_name: $GITHUB_RUN_ID
           report_path: ./examples/go/
