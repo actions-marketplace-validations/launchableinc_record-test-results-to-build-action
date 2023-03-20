@@ -1,55 +1,12 @@
-# Launchable record build and test results action
-
-[Launchable](https://www.launchableinc.com/) is a software development intelligence platform currently focused on continuous integration (CI). Using data from your CI runs, Launchable provides various features to speed up your testing workflow so you can ship high quality software faster.
-
-This action sends test results and Git commit graph changes from your GitHub Actions workflow to your Launchable workspace so you can use Launchable's features including:
-
-1. Test Notifications
-2. Test Insights
-3. Predictive Test Selection
+# Launchable record test results to build action
 
 # Usage
 
-1. Create an API key on the Settings page of your Launchable workspace.
-2. Create an [encrypted secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository) called `LAUNCHABLE_TOKEN` with your Launchable API key as its value.
-3. Add this action to your workflow. Add it after you run tests, like in the example below.
-4. Add the `with:`, `if:`, and `env:` sections as shown below.
-5. Set your `test_runner` and `report_path` values per [this doc](https://www.launchableinc.com/docs/sending-data-to-launchable/using-ci-integrations/using-the-launchable-github-action/#add-the-launchable-action).
-6. Run the workflow.
-7. If successful, you should see a link to the Launchable dashboard in the console output of the action.
+By default, we suggest using the [record build and test results action](https://github.com/marketplace/actions/record-build-and-test-results-action).
 
-Note: Depending on your test runner, you might need to modify your test runner command to ensure it creates test reports that Launchable accepts per [this doc](https://www.launchableinc.com/docs/sending-data-to-launchable/using-ci-integrations/using-the-launchable-github-action/#update-your-test-runner-command).
+However if your code repository/repositories is/are not available in the step where you run tests, you can split up the two steps (record build and record tests).
 
-
-```yaml
-name: Test
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-env:
-  LAUNCHABLE_DEBUG: 1
-  LAUNCHABLE_REPORT_ERROR: 1
-
-jobs:
-  tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Test
-        run: <YOUR TEST COMMAND HERE>
-      - name: Record build and test results action
-        uses: launchableinc/record-build-and-test-results-action@v1.0.0
-        with:
-          report_path: .
-          test_runner: <YOUR TEST RUNNER HERE>
-        if: always()
-        env:
-          LAUNCHABLE_TOKEN: ${{ secrets.LAUNCHABLE_TOKEN }}
-```
+Use the [Launchable record build action](https://github.com/marketplace/actions/record-build-action) to record a build, then use this action to record tests against the build.
 
 ## Example
 
@@ -58,6 +15,10 @@ Refer to [go-test example](./.github/workflows/go-test-example.yaml) for example
 # Inputs
 
 ## Required
+
+### `build_name`
+
+[Build](https://docs.launchableinc.com/concepts/build) name that you can give to the current software. Default is the Git SHA revealed by GitHub Actions.
 
 ### `test_runner`
 
@@ -71,29 +32,9 @@ Note: Depending on your test runner, you might need to modify your test runner c
 
 ## Optional
 
-### `source_path`
-
-Path to a local Git repository/workspace. Default `.`.
-
-### `build_name`
-
-[Build](https://docs.launchableinc.com/concepts/build) name that you can give to the current software. Default is the Git SHA revealed by GitHub Actions.
-
-### `max_days`
-
-The maximum number of days to collect commits retroactively. Default `30`.
-
-### `no_submodules`
-
-Flag to stop collecting build information from Git Submodules. Default `false`, which means the submodules are collected.
-
-### `no_build`
-
-Flag to record test session without recording build. Default `false`, which means the build is recorded.
-
 ### `python_version`
 
 Python version for the Launchable CLI to use. Default is `3.10`. Change this if your workflow requires a specific Python version.
 
 # License
-Launchable data collection action is licensed under [Apache license](./LICENSE).
+The Launchable record test results to build action is licensed under [Apache license](./LICENSE).
